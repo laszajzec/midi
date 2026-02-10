@@ -1,0 +1,1 @@
+Chech different MIDI connections
