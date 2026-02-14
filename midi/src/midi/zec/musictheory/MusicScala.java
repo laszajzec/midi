@@ -97,6 +97,36 @@ public abstract class MusicScala {
 	}
 	
 	public static String getChordName2(List<Integer> pitchesOrig) {
+		List<Integer> pitches2 = new ArrayList<>();
+		pitches2.addAll(pitchesOrig);
+		pitches2.sort((a, b) -> Integer.compare(a % 12, b % 12));
+		List<Integer> notes2 = new ArrayList<>(pitches2.stream().map(p -> p % 12).toList());
+		List<String> noteNames2 = new ArrayList<>(notes2.stream().map(p -> Notes.NOTE_NAME[p]).toList());
+		String chordName2 = null;
+		ChordType chordType2 = null;
+		int i2 = 0;
+		do {
+			int[] relPos2 = computeRelaivePos(notes2);
+			chordName2 = findChord(relPos2);
+			if (chordName2 != null) {
+				chordType2 = new ChordType(chordName2, i2);
+				break;
+			}
+			Collections.rotate(notes2, 1);
+			Collections.rotate(noteNames2, 1);
+			Collections.rotate(pitches2, 1);
+			i2++;
+		} while (i2 < notes2.size());
+		if (chordType2 == null) {
+			return "???";
+		} else {
+			System.out.format("  found: %s (%d)%n", noteNames2.stream().collect(Collectors.joining(",",  "[", "]" )), i2);
+			int basePitch2 = pitches2.get(0);
+			String baseNoteName2 = Notes.NOTE_NAME[basePitch2 % 12];
+			int baseNoteOctave2 = basePitch2 / 12;
+			return String.format("%s%s%d", baseNoteName2, chordType2.chordDescription.substring(1), baseNoteOctave2);
+		}
+		/*
 		ChordType chordType = null;
 		List<Integer> pitches = new ArrayList<>();
 		for (int p = 0; p < pitchesOrig.size(); p++) { pitches.add(pitchesOrig.get(p)); }
@@ -117,11 +147,13 @@ public abstract class MusicScala {
 		if (chordType == null) {
 			return "???";
 		} else {
+			System.out.format("  found: %s (%d)%n", pitches.stream().map(x -> Notes.NOTE_NAME[x % 12]).collect(Collectors.joining(",",  "[", "]" )), i);
 			int basePitch = pitchesOrig.get(chordType.indexOfBaseMNote);
 			String baseNoteName = Notes.NOTE_NAME[basePitch % 12];
 			int baseNoteOctave = basePitch / 12;
 			return String.format("%s%s%d", baseNoteName, chordType.chordDescription.substring(1), baseNoteOctave);
 		}
+		*/
 	}
 	
 	private static int[] computeRelaivePos(List<Integer> notes) {
@@ -134,7 +166,7 @@ public abstract class MusicScala {
 	
 	private static String findChord(int[] gaps) {
 		for (Map.Entry<String, int[]> chordCandidat : chords.entrySet()) {
-			if (Arrays.equals(chordCandidat.getValue(),gaps)) {
+			if (Arrays.equals(chordCandidat.getValue(), gaps)) {
 				return chordCandidat.getKey();
 			}
 		}
