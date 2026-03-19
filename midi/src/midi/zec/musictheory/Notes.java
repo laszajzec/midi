@@ -67,6 +67,10 @@ public class Notes {
 		}
 	}
 	
+	public static String getNoteName(int index) {
+		return NOTE_NAME[index % 12];
+	}
+	
 	public static enum NoteLength {
 		FULL, HALF, QUARTER, EIGTHTS, SIXTEENTH
 	}

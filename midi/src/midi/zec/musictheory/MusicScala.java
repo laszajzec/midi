@@ -6,10 +6,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class MusicScala {
 
+	// Note names		   0    1     2    3     4    5    6     7    8     9    10    11
+	public static final String[] noteName = new String[]{"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+	
+	
 	// Diatonic Ionic
 	public final int[] majorSteps		= {2, 2, 1, 2, 2, 2, 1}; // ionian
 	public final int[] majorIndices		= toIndices(majorSteps);
@@ -32,9 +37,8 @@ public abstract class MusicScala {
 	public final int[] diminishedChord = {3, 6};
 	public final int[] augmentedChord = {4, 8};
 
-	private static final Map<String, int[]> chords = buildChords();
-	private static final Map<String, String> chordToIndex = buildChordsFromIndex();
-	private static final Map<String, String> indexToChord = buildIndexToChords();
+	private static final Map<String, int[]> chordNameToIndices = buildChords();
+	private static final Map<String, String> chordIndicesToName = buildIndexToChords();
 	
 	private static Map<String, int[]> buildChords() {
 		Map<String, int[]> chordDict = new HashMap<>();
@@ -47,6 +51,7 @@ public abstract class MusicScala {
 		chordDict.put("Xm6",	new int[]{0, 3, 7, 9});		// mol 6
 		chordDict.put("Xm",		new int[]{0, 3, 7});		// mol base chord
 		chordDict.put("XM7",	new int[]{0, 4, 7, 11});	// dur 7
+		chordDict.put("X7-",	new int[]{0, 4, 10});	// dominant 7
 		chordDict.put("X7",		new int[]{0, 4, 7, 10});	// dominant 7
 		chordDict.put("X6",		new int[]{0, 4, 7, 9});		// dur 6
 		chordDict.put("X07",	new int[]{0, 3, 6, 10});	// mol 07
@@ -58,17 +63,14 @@ public abstract class MusicScala {
 	
 	private static Map<String, String> buildIndexToChords() {
 		Map<String, String> chordDict = new HashMap<>();
-		chordDict.put("4,7", "");
-		chordDict.put("3,7", "m");
+		for (Map.Entry<String, int[]> element : chordNameToIndices.entrySet()) {
+			chordDict.put(Arrays.toString(element.getValue()), element.getKey().substring(1));
+		}
 		return chordDict;
 	}
 	
-	private static Map<String, String> buildChordsFromIndex() {
-		Map<String, String> indexToChord = new HashMap<>();
-		for (Map.Entry<String, int[]> chord : chords.entrySet()) {
-			indexToChord.put(toString(chord.getValue()), chord.getKey());
-		}
-		return indexToChord;
+	public static String intervallsToChord(int[] intevalls) {
+		return chordIndicesToName.getOrDefault(Arrays.toString(intevalls), null);
 	}
 	
 	public static String toString(int[] arr) {
@@ -90,7 +92,7 @@ public abstract class MusicScala {
 		indices = indices.substring(2);
 		ChordType chordType = unifiedChordIndices(indices);
 		if (chordType == null) return "?";
-		String chordName = indexToChord.getOrDefault(chordType.chordDescription, "??").trim();
+		String chordName = chordIndicesToName.getOrDefault(chordType.chordDescription, "??").trim();
 		String baseNoteName = noteNames[chordType.indexOfBaseMNote % 12];
 		int baseNoteOctave = pitches[chordType.indexOfBaseMNote] / 12;
 		return String.format("%s%s%d", baseNoteName, chordName, baseNoteOctave);
@@ -165,7 +167,7 @@ public abstract class MusicScala {
 	}
 	
 	private static String findChord(int[] gaps) {
-		for (Map.Entry<String, int[]> chordCandidat : chords.entrySet()) {
+		for (Map.Entry<String, int[]> chordCandidat : chordNameToIndices.entrySet()) {
 			if (Arrays.equals(chordCandidat.getValue(), gaps)) {
 				return chordCandidat.getKey();
 			}
@@ -175,7 +177,11 @@ public abstract class MusicScala {
 	
 	
 	public static int[] getChordIndices(String name) {
-		return chords.getOrDefault(name, new int[]{});
+		return chordNameToIndices.getOrDefault(name, new int[]{});
+	}
+	
+	public static Set<String> getChordNames() {
+		return chordNameToIndices.keySet();
 	}
 		
 	private static ChordType unifiedChordIndices(String indices) {
@@ -199,6 +205,10 @@ public abstract class MusicScala {
 			indices[i + 1] = indices[i] + steps[i]; 
 		}
 		return indices;
+	}
+	
+	public static String getNoteName(int index) {
+		return noteName[index % 12];
 	}
 	
 	private record ChordType(String chordDescription, int indexOfBaseMNote) {}

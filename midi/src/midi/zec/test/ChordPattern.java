@@ -3,14 +3,18 @@ package midi.zec.test;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import midi.zec.musictheory.MusicScala;
+
 public class ChordPattern {
-	//													   0    1     2    3     4    5    6     7    8     9    10    11
-	private static final String[] noteName = new String[]{"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 
 	public static void main(String[] args) {
-		new ChordPattern().generate();
+		ChordPattern pattern = new ChordPattern();
+//		pattern.generate();
+		pattern.composeChords();
 	}
 	
 	private void intTest() {
@@ -56,7 +60,7 @@ public class ChordPattern {
 			for (int i = 0; i < indices.length; i++) {
 				int chordIndex = indices[i];
 				chord.add((noteStartIndex + chordIndex) % 12);
-				noteNames.add(noteName[chord.get(i)]);
+				noteNames.add(MusicScala.getNoteName(chord.get(i)));
 			}
 			printChords(chord, noteNames);
 
@@ -78,6 +82,42 @@ public class ChordPattern {
 		String indices = chord.stream().map(x -> String.format("%2d", mod(x-minIndex) % 12)).collect(Collectors.joining(","));
 		String notes = noteNames.stream().map(x -> String.format("%2s", x)).collect(Collectors.joining(","));
 		System.out.format(" %s (%s)", indices, notes);
+	}
+	
+	private void composeChords() {
+		List<String> heading = new ArrayList<>();
+		List<List<String>> chords = new ArrayList<>();
+		Set<String> rawChordNames = new TreeSet<String>(MusicScala.getChordNames());
+		heading.add("Base");
+		for (String chordName : rawChordNames) {
+			heading.add(chordName);
+		}
+		for (int baseNoteIndex = 0; baseNoteIndex < 12; baseNoteIndex++) {
+			composeChordsForBaseNote(baseNoteIndex, rawChordNames, chords);
+		}
+		// print result
+		System.out.println(heading.stream().collect(Collectors.joining(";")));
+		for (List<String> chord : chords) {
+			System.out.println(chord.stream().collect(Collectors.joining(";")));
+			System.out.println(";");
+		}
+	}
+	
+	private void composeChordsForBaseNote(int baseNoteIndex, Set<String> rawChordNames, List<List<String>> chords) {
+		List<String> chordsForBase = new ArrayList<>();
+		chordsForBase.add(MusicScala.getNoteName(baseNoteIndex));
+		for (String chordName : rawChordNames) {
+			chordsForBase.add(composeAChord(baseNoteIndex, MusicScala.getChordIndices(chordName)));
+		}
+		chords.add(chordsForBase);
+	}
+	
+	private String composeAChord(int baseNoteIndex, int[] indices) {
+		List<String> notes = new ArrayList<>();
+		for (int ind : indices) {
+			notes.add(MusicScala.getNoteName(baseNoteIndex + ind));
+		}
+		return notes.stream().collect(Collectors.joining("-"));
 	}
 	
 	private int mod(int orig) {
