@@ -1,11 +1,14 @@
 package midi.zec.test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import midi.zec.musictheory.MusicScala;
 
@@ -86,17 +89,21 @@ public class ChordPattern {
 	
 	private void composeChords() {
 		List<String> heading = new ArrayList<>();
+		List<String> gaps = new ArrayList<>();
 		List<List<String>> chords = new ArrayList<>();
 		Set<String> rawChordNames = new TreeSet<String>(MusicScala.getChordNames());
 		heading.add("Base");
+		gaps.add("");
 		for (String chordName : rawChordNames) {
-			heading.add(chordName);
+			heading.add(chordName.substring(1));
+			gaps.add(Arrays.stream(MusicScala.getChordIndices(chordName)).boxed().map(i -> Integer.toString(i)).collect(Collectors.joining(" ")));
 		}
 		for (int baseNoteIndex = 0; baseNoteIndex < 12; baseNoteIndex++) {
 			composeChordsForBaseNote(baseNoteIndex, rawChordNames, chords);
 		}
 		// print result
 		System.out.println(heading.stream().collect(Collectors.joining(";")));
+		System.out.println(gaps.stream().collect(Collectors.joining(";")));
 		for (List<String> chord : chords) {
 			System.out.println(chord.stream().collect(Collectors.joining(";")));
 			System.out.println(";");

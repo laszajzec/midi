@@ -57,7 +57,7 @@ public abstract class MusicScala {
 		chordDict.put("X07",	new int[]{0, 3, 6, 10});	// mol 07
 		chordDict.put("X+7",	new int[]{0, 4, 8, 10});	// aug 7
 		chordDict.put("X+",		new int[]{0, 4, 8}); 		// aug 
-		chordDict.put("X",		new int[]{0, 4, 7});		// dur base chord
+		chordDict.put("XM",		new int[]{0, 4, 7});		// dur base chord
 		return chordDict;
 	}
 	

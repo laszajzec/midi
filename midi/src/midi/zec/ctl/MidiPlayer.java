@@ -30,7 +30,7 @@ public abstract class MidiPlayer {
 		else if (chordSymbName.startsWith("X07"))	return new ChordGaps(3, new int[]{0, 3, 6, 10});	// mol 07
 		else if (chordSymbName.startsWith("X+7"))	return new ChordGaps(3, new int[]{0, 4, 8, 10});	// aug 7
 		else if (chordSymbName.startsWith("X+"))	return new ChordGaps(2, new int[]{0, 4, 8}); 		// aug 
-		else if (chordSymbName.startsWith("X"))		return new ChordGaps(1, new int[]{0, 4, 7});		// dur base chord
+		else if (chordSymbName.startsWith("XM"))		return new ChordGaps(1, new int[]{0, 4, 7});		// dur base chord
 		else {
 			System.out.println("Chord not recognized: " + chordSymbName);
 			return new ChordGaps(0, new int[]{0, 4, 7});
