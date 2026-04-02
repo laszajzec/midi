@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 public abstract class MusicScala {
 
 	// Note names		   0    1     2    3     4    5    6     7    8     9    10    11
-	public static final String[] noteName = new String[]{"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
-	
+	public static final String[] noteName     = new String[]{"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+	public static final String[] noteNameDown = new String[]{"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
 	
 	// Diatonic Ionic
 	public final int[] majorSteps		= {2, 2, 1, 2, 2, 2, 1}; // ionian
