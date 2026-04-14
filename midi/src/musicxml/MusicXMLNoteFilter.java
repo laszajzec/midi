@@ -1,14 +1,30 @@
 package musicxml;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.*;
 
-import java.io.File;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class MusicXMLNoteFilter {
 
     public static void main(String[] args) {
+    	MusicXMLNoteFilter obj = new MusicXMLNoteFilter();
+    	obj.collect();
+    }
+    
+    private List<Notes> notes;
+    private Notes current;
+    
+    public void collect() {
+    	notes = new ArrayList<>();
+    	
         try {
             File inputFile = new File("c:/Temp/Kotta/MusicXML/jeux-interdits.xml"); // Pfad zur MusicXML-Datei
 
@@ -56,11 +72,26 @@ public class MusicXMLNoteFilter {
                     if (!"1".equals(staff)) toIgnore = true;
                     
                     Element beam = (Element)noteElement.getElementsByTagName("beam").item(0);
-                    if (beam != null) {
-                    	String beamPos = noteElement.getAttribute("number");
-                    	if (!"begin".equals(beamPos)) toIgnore = true;
-                    	
+                    if (beam == null) {
+                		current = new Notes();
+                		notes.add(current);
+                    } else {
+                    	String beamPos = beam.getAttribute("number");
+                    	String beamCont = beam.getTextContent();
+                    	if ("begin".equals(beamCont)) {
+                    		current = new Notes();
+                    		notes.add(current);
+                    	} else {
+                    		toIgnore = true;
+                    	}
                     }
+                    
+                    MyNote myNote = new MyNote(step + alter, octave, duration);
+                    if (current == null) {
+                		current = new Notes();
+                		notes.add(current);
+                    }
+                    current.add(myNote);
                     
                     if (!toIgnore) {
 //                    	System.out.println("Note: " + step + alter + octave + " | Dauer: " + duration);
@@ -75,5 +106,16 @@ public class MusicXMLNoteFilter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    	System.out.println("");
     }
+    
+    private record MyNote(String name, String octave, String duration) {};
+    
+    private static class Notes {
+    	List<MyNote> notes = new ArrayList<>();
+    	
+    	public void add(MyNote note) {
+    		notes.add(note);
+    	}
+    };
 }

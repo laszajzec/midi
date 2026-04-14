@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public abstract class MusicScala {
 
-	// Note names		   0    1     2    3     4    5    6     7    8     9    10    11
+	// Note names											  0    1     2    3     4    5    6     7    8     9    10    11
 	public static final String[] noteName     = new String[]{"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 	public static final String[] noteNameDown = new String[]{"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
 	
@@ -51,7 +51,7 @@ public abstract class MusicScala {
 		chordDict.put("Xm6",	new int[]{0, 3, 7, 9});		// mol 6
 		chordDict.put("Xm",		new int[]{0, 3, 7});		// mol base chord
 		chordDict.put("XM7",	new int[]{0, 4, 7, 11});	// dur 7
-		chordDict.put("X7-",	new int[]{0, 4, 10});	// dominant 7
+		chordDict.put("X7-",	new int[]{0, 4, 10});		// dominant 7
 		chordDict.put("X7",		new int[]{0, 4, 7, 10});	// dominant 7
 		chordDict.put("X6",		new int[]{0, 4, 7, 9});		// dur 6
 		chordDict.put("X07",	new int[]{0, 3, 6, 10});	// mol 07
