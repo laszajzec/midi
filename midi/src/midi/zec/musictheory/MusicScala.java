@@ -49,7 +49,7 @@ public abstract class MusicScala {
 		chordDict.put("XmM7",	new int[]{0, 3, 7, 11});	// mol mol dur 7
 		chordDict.put("Xm7",	new int[]{0, 3, 7, 10});	// mol 7
 		chordDict.put("Xm6",	new int[]{0, 3, 7, 9});		// mol 6
-		chordDict.put("Xm",		new int[]{0, 3, 7});		// mol base chord
+		chordDict.put("Xm",		new int[]{0, 3, 7});		// minor
 		chordDict.put("XM7",	new int[]{0, 4, 7, 11});	// dur 7
 		chordDict.put("X7-",	new int[]{0, 4, 10});		// dominant 7
 		chordDict.put("X7",		new int[]{0, 4, 7, 10});	// dominant 7
@@ -57,7 +57,7 @@ public abstract class MusicScala {
 		chordDict.put("X07",	new int[]{0, 3, 6, 10});	// mol 07
 		chordDict.put("X+7",	new int[]{0, 4, 8, 10});	// aug 7
 		chordDict.put("X+",		new int[]{0, 4, 8}); 		// aug 
-		chordDict.put("XM",		new int[]{0, 4, 7});		// dur base chord
+		chordDict.put("XM",		new int[]{0, 4, 7});		// major
 		return chordDict;
 	}
 	

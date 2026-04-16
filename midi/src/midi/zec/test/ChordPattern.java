@@ -153,7 +153,8 @@ public class ChordPattern {
 		List<Integer> bestRotation = null;
 		int bestValue = Integer.MAX_VALUE; 
 		for (int i = 0; i < indices.length; i++) {
-			int currentValue = Math.abs(baseNoteIndex + myIndices.get(0) - 7); // Distance to "G"
+			int leftNote = (baseNoteIndex + myIndices.get(0)) % 12;
+			int currentValue = Math.abs(leftNote - 7); // Distance to "G"
 			if (currentValue < bestValue) {
 				bestValue = currentValue;
 				bestRotation = new ArrayList<Integer>(myIndices);
