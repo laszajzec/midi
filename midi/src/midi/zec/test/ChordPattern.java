@@ -119,7 +119,7 @@ public class ChordPattern {
 			List<String> leftChord = leftHandChords.get(i);
 			System.out.println(chord.stream().collect(Collectors.joining(";")));
 			System.out.println(leftChord.stream().collect(Collectors.joining(";")));
-			System.out.println(";");
+//			System.out.println(";");
 		}
 	}
 	
@@ -131,8 +131,8 @@ public class ChordPattern {
 				chordsForBase.add(MusicScala.getNoteName(baseNoteIndex));
 				bestLeftHand.add("");
 			} else {
-			chordsForBase.add(composeAChord(baseNoteIndex, MusicScala.getChordIndices(chordName)));
-			bestLeftHand.add(findBestLeftHand(baseNoteIndex, MusicScala.getChordIndices(chordName)));
+				chordsForBase.add(composeAChord(baseNoteIndex, MusicScala.getChordIndices(chordName)));
+				bestLeftHand.add(findBestLeftHand(baseNoteIndex, MusicScala.getChordIndices(chordName)));
 			}
 		}
 		chords.add(chordsForBase);
@@ -153,20 +153,14 @@ public class ChordPattern {
 		List<Integer> bestRotation = null;
 		int bestValue = Integer.MAX_VALUE; 
 		for (int i = 0; i < indices.length; i++) {
-			int currentValue = computeLeftHandValue(baseNoteIndex, myIndices);
+			int currentValue = Math.abs(baseNoteIndex + myIndices.get(0) - 7); // Distance to "G"
 			if (currentValue < bestValue) {
 				bestValue = currentValue;
 				bestRotation = new ArrayList<Integer>(myIndices);
-				Collections.rotate(myIndices, 1);
 			}
+			Collections.rotate(myIndices, 1);
 		}
 		return bestRotation.stream().map(ind -> MusicScala.getNoteName(baseNoteIndex+ind)).collect(Collectors.joining("-"));
-	}
-	
-	private int computeLeftHandValue(int baseNoteIndex, List<Integer> indices) {
-		// Note "G" index is 7
-		int distanceToG = Math.abs(baseNoteIndex + indices.get(0) - 7);
-		return distanceToG;
 	}
 	
 	private int mod(int orig) {
