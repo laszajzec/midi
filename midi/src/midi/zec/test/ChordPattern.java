@@ -4,11 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import midi.zec.musictheory.MusicScala;
 
@@ -16,75 +12,7 @@ public class ChordPattern {
 
 	public static void main(String[] args) {
 		ChordPattern pattern = new ChordPattern();
-//		pattern.generate();
 		pattern.composeChords();
-	}
-	
-	private void intTest() {
-		System.out.format("3 %d%n", Math.floorMod(3, 12));
-		System.out.format("-3 %d%n", Math.floorMod(-3, 12));
-	}
-
-	private void generate() {
-		intTest();
-
-		generatePattern(new int[] {0, 4, 7}, "Major");
-		generatePattern(new int[] {0, 3, 7}, "Minor");
-//		for (int i = 0; i < 12; i++) {
-//			int baseNoteIndex = i;
-//			List<Integer> chord = new ArrayList<>();
-//			List<String> noteNames = new ArrayList<>(); 
-//			chord.add(baseNoteIndex);
-//			chord.add((baseNoteIndex + 4) % 12);
-//			chord.add((baseNoteIndex + 7) % 12);
-//			noteNames.add(noteName[chord.get(0)]);
-//			noteNames.add(noteName[chord.get(1)]);
-//			noteNames.add(noteName[chord.get(2)]);
-//			printChords(chord, noteNames);
-//
-//			Collections.rotate(chord, 1);
-//			Collections.rotate(noteNames, 1);
-//			printChords(chord, noteNames);
-//
-//			Collections.rotate(chord, 1);
-//			Collections.rotate(noteNames, 1);
-//			printChords(chord, noteNames);
-//
-//			System.out.println("");
-//		}
-		
-	}
-	
-	private void generatePattern(int[] indices, String comment) {
-		System.out.println(comment);
-		for (int startNoteIndex = 0; startNoteIndex < 12; startNoteIndex++) {
-			List<Integer> chord = new ArrayList<>();
-			List<String> noteNames = new ArrayList<>();
-			for (int chordTypeIndex = 0; chordTypeIndex < indices.length; chordTypeIndex++) {
-				int chordIndex = indices[chordTypeIndex];
-				chord.add((startNoteIndex + chordIndex) % 12);
-				noteNames.add(MusicScala.getNoteName(chord.get(chordTypeIndex)));
-			}
-			printChords(chord, noteNames);
-
-			Collections.rotate(chord, 1);
-			Collections.rotate(noteNames, 1);
-			printChords(chord, noteNames);
-
-			Collections.rotate(chord, 1);
-			Collections.rotate(noteNames, 1);
-			printChords(chord, noteNames);
-
-			System.out.println("");
-		}
-		
-	}
-	
-	private void printChords(List<Integer> chord, List<String> noteNames) {
-		Integer minIndex = chord.get(0);
-		String indices = chord.stream().map(x -> String.format("%2d", mod(x-minIndex) % 12)).collect(Collectors.joining(","));
-		String notes = noteNames.stream().map(x -> String.format("%2s", x)).collect(Collectors.joining(","));
-		System.out.format(" %s (%s)", indices, notes);
 	}
 	
 	List<String> rawChordNames = Arrays.asList(new String[] {

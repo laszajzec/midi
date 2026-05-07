@@ -87,7 +87,7 @@ public class MidiTakeFromKeyboard {
 	    	if (message instanceof ShortMessage) {
 	    		ShortMessage sm = (ShortMessage) message;
 	    		if (sm.getCommand() == ShortMessage.NOTE_ON && sm.getData2() > 0) {
-//					System.out.format("%7d NOTE ON   | Ch %d | Note %s (%d) | Vel %3d%n", timeStamp, sm.getChannel(), Notes.NOTE_NAME[sm.getData1() % 12], sm.getData1(), sm.getData2());
+					System.out.format("%7d NOTE ON   | Ch %d | Note %s (%d) | Vel %3d%n", timeStamp, sm.getChannel(), Notes.NOTE_NAME[sm.getData1() % 12], sm.getData1(), sm.getData2());
 	    			if (firstNoteTime == -1) {
 	    				firstNoteTime = System.currentTimeMillis();
 	    			}
@@ -95,7 +95,7 @@ public class MidiTakeFromKeyboard {
 	    		} else if (sm.getCommand() == ShortMessage.NOTE_OFF ||
 	    				(sm.getCommand() == ShortMessage.NOTE_ON && sm.getData2() == 0)) {
     				detectChord();
-//					System.out.format("%7d NOTE OFF  | Ch %d | Note %s (%d)%n", timeStamp, sm.getChannel(), Notes.NOTE_NAME[sm.getData1() % 12], sm.getData1(), sm.getData2());
+					System.out.format("%7d NOTE OFF  | Ch %d | Note %s (%d)%n", timeStamp, sm.getChannel(), Notes.NOTE_NAME[sm.getData1() % 12], sm.getData1(), sm.getData2());
 	    			activeNotes.remove(sm.getData1());
 	    			if (sm.getData1() == 24 || sm.getData1() == 36) {
 	    				System.out.println("Finishing...");
@@ -104,6 +104,11 @@ public class MidiTakeFromKeyboard {
 
 	    		} else {
 	    			// other MIDI command
+	    			int d1 = sm.getData1();
+	    			int d2 = sm.getData2();
+	    			if (d1 != 0 || d2 != 0) {
+	    				System.out.format("%7d Other  | Ch %d | Data1 %d) | Data2 %d%n", timeStamp, sm.getChannel(), sm.getData1(), sm.getData2());
+	    			}
 	    		}
 	    	}
 	    }

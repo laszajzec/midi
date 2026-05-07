@@ -40,24 +40,71 @@ public abstract class MusicScala {
 	private static final Map<String, int[]> chordNameToIndices = buildChords();
 	private static final Map<String, String> chordIndicesToName = buildIndexToChords();
 	
+	public static enum Chord {
+		X7f9("7th flat 9th",		"X7f9",		new int[]{0, 1, 4, 7, 10}),
+		Xm13("13th",				"Xm13",		new int[]{0, 2, 3, 5, 7, 9, 10}),
+		Xm11("minor 11th",			"Xm11",		new int[]{0, 2, 3, 5, 7, 10}),
+		Xm9("minor 9th",			"Xm9",		new int[]{0, 2, 3, 7, 10}),
+		X13("13th",					"X13",		new int[]{0, 2, 4, 5, 7, 9, 10}),
+		X11("11th",					"X11",		new int[]{0, 2, 4, 5, 7, 10}),
+		X7sm11("7th sharp 11th",	"X7s11",	new int[]{0, 2, 4, 6, 7, 10}),
+		Xa9("added 9th",			"Xa9",		new int[]{0, 2, 4, 7}),
+		Xa69("6th added 9th",		"X69",		new int[]{0, 2, 4, 7, 9}),
+		X9("9th",					"X9",		new int[]{0, 2, 4, 7, 10}),
+		XM9("major 9th",			"XM9",		new int[]{0, 2, 4, 7, 11}),
+		Xsus2("suspended 2",		"Xsus2",	new int[]{0, 2, 7}),
+		X6("6th",					"X6",		new int[]{0, 2, 7, 9}),
+		X7s9("7th sharp 9th",		"X7s9",		new int[]{0, 3, 4, 7, 10}),
+		Xdim("diminished",			"Xdim",		new int[]{0, 3, 6}),
+		Xdim7("diminished 7",		"Xdim7",	new int[]{0, 3, 6, 9}),
+		Xhdim7("halfdiminished 7",	"Xhdim7",	new int[]{0, 3, 6, 10}),
+		Xm("minor",					"Xm",		new int[]{0, 3, 7}),
+		Xm6("minor 6th",			"Xm6",		new int[]{0, 3, 7, 9}),
+		Xm7("minor 7",				"Xm7",		new int[]{0, 3, 7, 10}),
+		XM7("major 7",				"XM7",		new int[]{0, 3, 7, 11}),
+		X7f5("7th flat 5th",		"X7f5",		new int[]{0, 4, 6, 10}),
+		XM("major",					"XM",		new int[]{0, 4, 7}),
+		X6d("dominant 6",			"X6d",		new int[]{0, 4, 7, 9}),
+		X7r("dominant 7 reduced",	"X7-",		new int[]{0, 4, 10}),
+		X7("dominant 7",			"X7",		new int[]{0, 4, 7, 10}),
+		Xaug("augmented",			"Xaug",		new int[]{0, 4, 8}),
+		X7s5("7th sharp 5th",		"X7s5",		new int[]{0, 4, 8, 10}),
+		Xsus4("suspended 4",		"Xsus4",	new int[]{0, 5, 7}),
+		;
+
+		private final String chordName;
+		private final String chordNameShort;
+		private final int[] chordIndices;
+		
+		private Chord(final String chordName, final String chordNameShort, final int[] chordIndices) {
+			this.chordName = chordName;
+			this.chordNameShort = chordNameShort;
+			this.chordIndices = chordIndices;
+		}
+
+		public String getChordName() { return chordName; }
+		public String getChordNameShort() { return chordNameShort; }
+		public int[] getChordIndices() { return chordIndices; }
+	}
+	
 	private static Map<String, int[]> buildChords() {
 		Map<String, int[]> chordDict = new HashMap<>();
-		chordDict.put("Xsus4",	new int[]{0, 5, 7});		// sus 4
-		chordDict.put("Xsus2",	new int[]{0, 2, 7});		// sus2
-		chordDict.put("Xo7",	new int[]{0, 3, 6, 9});		// mol dim 7
-		chordDict.put("Xo",		new int[]{0, 3, 6});		// mol dim
-		chordDict.put("XmM7",	new int[]{0, 3, 7, 11});	// mol mol dur 7
-		chordDict.put("Xm7",	new int[]{0, 3, 7, 10});	// mol 7
-		chordDict.put("Xm6",	new int[]{0, 3, 7, 9});		// mol 6
-		chordDict.put("Xm",		new int[]{0, 3, 7});		// minor
-		chordDict.put("XM7",	new int[]{0, 4, 7, 11});	// dur 7
-		chordDict.put("X7-",	new int[]{0, 4, 10});		// dominant 7
-		chordDict.put("X7",		new int[]{0, 4, 7, 10});	// dominant 7
-		chordDict.put("X6",		new int[]{0, 4, 7, 9});		// dur 6
-		chordDict.put("X07",	new int[]{0, 3, 6, 10});	// mol 07
-		chordDict.put("X+7",	new int[]{0, 4, 8, 10});	// aug 7
-		chordDict.put("X+",		new int[]{0, 4, 8}); 		// aug 
-		chordDict.put("XM",		new int[]{0, 4, 7});		// major
+		chordDict.put("Xsus4",	new int[]{0, 5, 7});		// sus 4 +
+		chordDict.put("Xsus2",	new int[]{0, 2, 7});		// sus2 +
+		chordDict.put("Xo7",	new int[]{0, 3, 6, 9});		// mol dim 7 +
+		chordDict.put("Xo",		new int[]{0, 3, 6});		// mol dim +
+		chordDict.put("XmM7",	new int[]{0, 3, 7, 11});	// mol dur 7 +
+		chordDict.put("Xm7",	new int[]{0, 3, 7, 10});	// mol 7 +
+		chordDict.put("Xm6",	new int[]{0, 3, 7, 9});		// mol 6 +
+		chordDict.put("Xm",		new int[]{0, 3, 7});		// minor +
+		chordDict.put("XM7",	new int[]{0, 4, 7, 11});	// dur 7 +
+		chordDict.put("X7-",	new int[]{0, 4, 10});		// dominant 7 ?
+		chordDict.put("X7",		new int[]{0, 4, 7, 10});	// dominant 7 +
+		chordDict.put("X6",		new int[]{0, 4, 7, 9});		// dur 6 +
+		chordDict.put("X07",	new int[]{0, 3, 6, 10});	// mol 07 +
+		chordDict.put("X+7",	new int[]{0, 4, 8, 10});	// aug 7 +
+		chordDict.put("X+",		new int[]{0, 4, 8}); 		// aug +
+		chordDict.put("XM",		new int[]{0, 4, 7});		// major +
 		return chordDict;
 	}
 	
